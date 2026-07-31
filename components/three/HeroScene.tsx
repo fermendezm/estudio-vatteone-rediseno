@@ -84,7 +84,11 @@ export default function HeroScene() {
               El fondo del entorno es teal medio, no crema: si fuera crema el
               vidrio refractaría un plano uniforme y se vería como una mancha
               blanca. El contraste es lo que dibuja los bordes del anillo. */}
-          <Environment resolution={quality === 'high' ? 256 : 128} frames={1}>
+          {/* Sin `frames`: el entorno se re-renderiza cada cuadro. Con frames={1}
+              el bake compite con el montaje de los Lightformer y el vidrio sale
+              blanco mate la mitad de las veces. Son 4 quads planos, así que a
+              esta resolución el costo por cuadro es despreciable. */}
+          <Environment resolution={quality === 'high' ? 128 : 64}>
             <color attach="background" args={['#4d716f']} />
             <Lightformer
               intensity={3.2}
