@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { asset } from '@/lib/asset'
 import { AnimatePresence, motion } from 'framer-motion'
 import { nav, site } from '@/lib/site'
 
@@ -47,7 +48,7 @@ export default function Nav() {
             aria-label={`${site.name} — inicio`}
           >
             <Image
-              src="/img/logo-vatteone.png"
+              src={asset("/img/logo-vatteone.png")}
               alt=""
               width={633}
               height={1024}

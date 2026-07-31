@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import { asset } from '@/lib/asset'
 import { clients } from '@/lib/site'
 import Reveal from './Reveal'
 
@@ -40,7 +41,7 @@ export default function Clients() {
               className="flex h-16 w-36 shrink-0 items-center justify-center md:w-48"
             >
               <Image
-                src={c.logo}
+                src={asset(c.logo)}
                 alt={c.name}
                 width={220}
                 height={80}

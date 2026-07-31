@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { asset } from '@/lib/asset'
 import { nav, site, yearsOfExperience } from '@/lib/site'
 
 export default function Footer() {
@@ -10,7 +11,7 @@ export default function Footer() {
           <div className="md:col-span-5">
             <div className="flex items-center gap-3">
               <Image
-                src="/img/logo-vatteone.png"
+                src={asset("/img/logo-vatteone.png")}
                 alt=""
                 width={633}
                 height={1024}
