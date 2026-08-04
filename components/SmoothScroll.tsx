@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import Lenis from 'lenis'
+import { registerLenis } from '@/lib/scroll-lock'
 
 /**
  * Scroll suave con inercia. Se desactiva si el usuario pidió menos movimiento
@@ -17,6 +18,8 @@ export default function SmoothScroll() {
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       touchMultiplier: 1.6,
     })
+    // El menú móvil necesita frenarlo para bloquear el scroll de fondo
+    registerLenis(lenis)
 
     let raf = 0
     const loop = (time: number) => {
@@ -44,6 +47,7 @@ export default function SmoothScroll() {
     return () => {
       document.removeEventListener('click', onClick)
       cancelAnimationFrame(raf)
+      registerLenis(null)
       lenis.destroy()
     }
   }, [])

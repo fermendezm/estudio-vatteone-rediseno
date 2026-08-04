@@ -14,7 +14,7 @@ export default function ServicesList() {
   const [active, setActive] = useState<string | null>(null)
 
   return (
-    <section id="servicios" className="relative py-28 md:py-40">
+    <section id="servicios" className="relative py-20 md:py-40">
       <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
         <div className="grid gap-12 md:grid-cols-12 md:gap-8">
           <div className="md:col-span-4">
@@ -63,7 +63,7 @@ export default function ServicesList() {
                       onMouseLeave={() => setActive(null)}
                       onFocus={() => setActive(s.id)}
                       onBlur={() => setActive(null)}
-                      className="group relative block border-b border-line py-7"
+                      className="group relative block border-b border-line py-6 md:py-7"
                     >
                       {/* Barra teal que crece desde la izquierda */}
                       <motion.span
@@ -72,7 +72,7 @@ export default function ServicesList() {
                         animate={{ width: isActive ? '100%' : '0%' }}
                         transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
                       />
-                      <div className="flex items-baseline gap-5 px-1 md:gap-8">
+                      <div className="flex items-start gap-5 px-1 md:items-baseline md:gap-8">
                         <span
                           className={`font-mono text-[11px] tracking-widest transition-colors duration-500 ${
                             isActive ? 'text-teal' : 'text-muted'
@@ -88,28 +88,39 @@ export default function ServicesList() {
                           >
                             {s.title}
                           </h3>
-                          <AnimatePresence initial={false}>
-                            {isActive && (
-                              <motion.p
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: 'auto', opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                transition={{
-                                  duration: 0.45,
-                                  ease: [0.16, 1, 0.3, 1],
-                                }}
-                                className="overflow-hidden text-[15px] leading-relaxed text-ink-soft"
-                              >
-                                <span className="block pt-2.5">{s.short}</span>
-                              </motion.p>
-                            )}
-                          </AnimatePresence>
+                          {/* En touch no hay hover: la descripción se muestra
+                              siempre. Reservarla al hover la volvía contenido
+                              inalcanzable en teléfono. */}
+                          <p className="pt-2 text-[14px] leading-relaxed text-ink-soft md:hidden">
+                            {s.short}
+                          </p>
+
+                          <div className="hidden md:block">
+                            <AnimatePresence initial={false}>
+                              {isActive && (
+                                <motion.p
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: 'auto', opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{
+                                    duration: 0.45,
+                                    ease: [0.16, 1, 0.3, 1],
+                                  }}
+                                  className="overflow-hidden text-[15px] leading-relaxed text-ink-soft"
+                                >
+                                  <span className="block pt-2.5">{s.short}</span>
+                                </motion.p>
+                              )}
+                            </AnimatePresence>
+                          </div>
                         </div>
+                        {/* En móvil la flecha es permanente: es la única señal
+                            de que la fila lleva a otra página. */}
                         <span
                           className={`shrink-0 text-teal transition-all duration-500 ${
                             isActive
-                              ? 'translate-x-0 opacity-100'
-                              : '-translate-x-2 opacity-0'
+                              ? 'md:translate-x-0 md:opacity-100'
+                              : 'md:-translate-x-2 md:opacity-0'
                           }`}
                           aria-hidden="true"
                         >

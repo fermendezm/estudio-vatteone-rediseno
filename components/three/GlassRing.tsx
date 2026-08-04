@@ -12,9 +12,11 @@ import * as THREE from 'three'
 export default function GlassRing({
   pointer,
   quality,
+  scale = 1,
 }: {
   pointer: React.MutableRefObject<THREE.Vector2>
   quality: 'high' | 'low'
+  scale?: number
 }) {
   const group = useRef<THREE.Group>(null)
   const mesh = useRef<THREE.Mesh>(null)
@@ -47,8 +49,12 @@ export default function GlassRing({
 
   const segments: [number, number] = quality === 'high' ? [180, 44] : [96, 22]
 
+  // En calidad baja no hay transmisión, así que el jade tiene que ir en el color
+  // base: en blanco pálido el anillo se lee como un dónut genérico y no como la
+  // pieza de vidrio de la versión de escritorio.
+
   return (
-    <group ref={group}>
+    <group ref={group} scale={scale}>
       <mesh ref={mesh} castShadow={false}>
         <torusGeometry args={[0.92, 0.27, segments[1], segments[0]]} />
         {quality === 'high' ? (
@@ -67,10 +73,10 @@ export default function GlassRing({
           />
         ) : (
           <meshStandardMaterial
-            color="#dcebe9"
-            roughness={0.28}
-            metalness={0.1}
-            envMapIntensity={0.9}
+            color="#6fb0ac"
+            roughness={0.22}
+            metalness={0.15}
+            envMapIntensity={1.1}
           />
         )}
       </mesh>

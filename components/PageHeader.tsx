@@ -12,7 +12,7 @@ export default function PageHeader({
   lead: string
 }) {
   return (
-    <header className="relative overflow-hidden border-b border-line pb-20 pt-40 md:pb-28 md:pt-52">
+    <header className="relative overflow-hidden border-b border-line pb-14 pt-32 md:pb-28 md:pt-52">
       {/* Halo teal muy tenue detrás del título */}
       <div
         aria-hidden="true"

@@ -15,7 +15,7 @@ a un sitio estático moderno, con escena WebGL en el hero.
 
 ## Comandos
 
-Desarrollo en `http://localhost:4321`:
+Desarrollo en `http://localhost:4323`:
 
 ```bash
 npm run dev

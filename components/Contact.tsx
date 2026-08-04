@@ -100,9 +100,9 @@ export default function Contact() {
   }
 
   return (
-    <section id="contacto" className="relative border-t border-line py-28 md:py-40">
+    <section id="contacto" className="relative border-t border-line py-20 md:py-40">
       <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-        <div className="grid gap-16 md:grid-cols-12 md:gap-8">
+        <div className="grid gap-12 md:grid-cols-12 md:gap-8">
           <div className="md:col-span-5">
             <Reveal>
               <p className="eyebrow flex items-center gap-3">
@@ -144,7 +144,7 @@ export default function Contact() {
                   <dd className="mt-2">
                     <a
                       href={`mailto:${site.email}`}
-                      className="link-underline break-all text-[16px] text-ink transition-colors hover:text-teal"
+                      className="link-underline break-all text-[15px] text-ink transition-colors hover:text-teal md:text-[16px]"
                     >
                       {site.email}
                     </a>
@@ -189,7 +189,7 @@ export default function Contact() {
 
           <div className="md:col-span-6 md:col-start-7">
             <Reveal delay={1}>
-              <form onSubmit={onSubmit} className="space-y-9">
+              <form onSubmit={onSubmit} className="space-y-7 md:space-y-9">
                 <input
                   type="text"
                   name="empresa_web"

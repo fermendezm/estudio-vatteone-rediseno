@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { asset } from '@/lib/asset'
 import { AnimatePresence, motion } from 'framer-motion'
 import { nav, site } from '@/lib/site'
+import { lockScroll } from '@/lib/scroll-lock'
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
@@ -18,12 +19,10 @@ export default function Nav() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Bloquear el scroll del body con el menú móvil abierto
+  // Bloquear el scroll de fondo con el menú móvil abierto
   useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : ''
-    return () => {
-      document.body.style.overflow = ''
-    }
+    lockScroll(open)
+    return () => lockScroll(false)
   }, [open])
 
   useEffect(() => {
@@ -55,11 +54,14 @@ export default function Nav() {
               priority
               className="h-9 w-auto md:h-10"
             />
-            <span className="hidden leading-none sm:block">
-              <span className="block font-display text-[19px] tracking-tight text-ink">
+            {/* El nombre también en móvil: antes el header era un logo de 22px
+                y una hamburguesa, sin marca legible. La bajada se oculta en
+                pantallas muy angostas para no empujar al botón de menú. */}
+            <span className="block leading-none">
+              <span className="block font-display text-[17px] tracking-tight text-ink md:text-[19px]">
                 Estudio Vatteone
               </span>
-              <span className="mt-0.5 block text-[10px] uppercase tracking-[0.2em] text-muted">
+              <span className="mt-0.5 hidden text-[10px] uppercase tracking-[0.2em] text-muted min-[380px]:block">
                 Fundado en {site.foundedYear}
               </span>
             </span>

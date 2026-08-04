@@ -73,11 +73,11 @@ export default function Hero() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease, delay: 0.85 }}
-            className="reveal mt-11 flex flex-wrap items-center gap-4"
+            className="reveal mt-11 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4"
           >
             <Link
               href="/servicios"
-              className="group inline-flex items-center gap-3 rounded-full bg-ink px-7 py-3.5 text-[15px] font-medium text-paper transition-colors hover:bg-teal-deep"
+              className="group inline-flex items-center justify-center gap-3 rounded-full bg-ink px-7 py-4 text-[15px] font-medium text-paper transition-colors hover:bg-teal-deep sm:justify-start sm:py-3.5"
             >
               Ver servicios
               <svg
@@ -99,7 +99,7 @@ export default function Hero() {
             </Link>
             <a
               href="#contacto"
-              className="inline-flex items-center gap-3 rounded-full border border-ink/15 px-7 py-3.5 text-[15px] text-ink transition-colors hover:border-teal hover:text-teal"
+              className="inline-flex items-center justify-center gap-3 rounded-full border border-ink/15 px-7 py-4 text-[15px] text-ink transition-colors hover:border-teal hover:text-teal sm:justify-start sm:py-3.5"
             >
               Hablar con el estudio
             </a>

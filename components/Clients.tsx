@@ -13,7 +13,7 @@ export default function Clients() {
   const row = [...clients, ...clients, ...clients]
 
   return (
-    <section className="overflow-hidden py-24 md:py-32">
+    <section className="overflow-hidden py-16 md:py-32">
       <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
         <Reveal>
           <p className="eyebrow flex items-center gap-3">

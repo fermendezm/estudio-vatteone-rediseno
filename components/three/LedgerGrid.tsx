@@ -16,8 +16,11 @@ const DEPTH = 11
  */
 export default function LedgerGrid({
   pointer,
+  opacity = 1,
 }: {
   pointer: React.MutableRefObject<THREE.Vector2>
+  /** En vertical la malla se ve mucho más ampliada y tapa el texto: se atenúa. */
+  opacity?: number
 }) {
   const matRef = useRef<THREE.ShaderMaterial>(null)
 
@@ -56,7 +59,10 @@ export default function LedgerGrid({
       uTeal: { value: new THREE.Color('#0c8183') },
       uGold: { value: new THREE.Color('#c9a45c') },
       uOpacity: { value: 0 },
+      uMaxAlpha: { value: opacity },
     }),
+    // `opacity` sólo siembra el valor inicial; los cambios se aplican en useFrame
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
 
@@ -69,6 +75,13 @@ export default function LedgerGrid({
       m.uniforms.uOpacity.value,
       1,
       1.2,
+      delta,
+    )
+    // Sigue al prop: al rotar el teléfono cambia sin remontar el material
+    m.uniforms.uMaxAlpha.value = THREE.MathUtils.damp(
+      m.uniforms.uMaxAlpha.value,
+      opacity,
+      4,
       delta,
     )
     const p = m.uniforms.uPointer.value as THREE.Vector2
@@ -115,6 +128,7 @@ export default function LedgerGrid({
           uniform vec3  uTeal;
           uniform vec3  uGold;
           uniform float uOpacity;
+          uniform float uMaxAlpha;
           varying float vElev;
           varying vec2  vUv;
 
@@ -127,7 +141,7 @@ export default function LedgerGrid({
             float edgeX = smoothstep(0.0, 0.32, vUv.x) * (1.0 - smoothstep(0.68, 1.0, vUv.x));
             float edgeY = smoothstep(0.0, 0.28, vUv.y) * (1.0 - smoothstep(0.42, 0.88, vUv.y));
 
-            float alpha = edgeX * edgeY * 0.30 * uOpacity;
+            float alpha = edgeX * edgeY * 0.30 * uOpacity * uMaxAlpha;
             alpha *= 0.6 + smoothstep(-0.4, 1.2, vElev) * 0.6;
 
             if (alpha < 0.004) discard;

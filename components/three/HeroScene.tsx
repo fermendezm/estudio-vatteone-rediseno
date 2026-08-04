@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useThree } from '@react-three/fiber'
 import { Environment, Lightformer } from '@react-three/drei'
 import * as THREE from 'three'
 import LedgerGrid from './LedgerGrid'
@@ -9,6 +9,63 @@ import GlassRing from './GlassRing'
 import GoldDust from './GoldDust'
 
 type Quality = 'high' | 'low' | 'off'
+
+/**
+ * La cámara tiene fov vertical, así que en un teléfono en vertical el encuadre
+ * horizontal se angosta muchísimo: el anillo, ubicado para pantalla ancha, caía
+ * fuera del frustum y el hero móvil se quedaba sin objeto. Acá la composición se
+ * recalcula contra el aspecto real del canvas, no contra un breakpoint de CSS.
+ */
+function Composition({
+  pointer,
+  quality,
+}: {
+  pointer: React.MutableRefObject<THREE.Vector2>
+  quality: 'high' | 'low'
+}) {
+  const size = useThree((s) => s.size)
+  const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera
+  const aspect = size.width / Math.max(1, size.height)
+  const portrait = aspect < 0.9
+
+  // Media anchura visible al plano donde vive el anillo: con esto se ubica
+  // dentro del encuadre en lugar de adivinar una x fija.
+  const ringZ = portrait ? -1.5 : -1.9
+  const dist = camera.position.z - ringZ
+  const halfH = dist * Math.tan((camera.fov * Math.PI) / 360)
+  const halfW = halfH * aspect
+
+  // En vertical el anillo va al hueco libre a la derecha del titular: las tres
+  // líneas del h1 ocupan como mucho dos tercios del ancho. Se posiciona en
+  // fracciones del encuadre, así queda igual en 320px que en 430px.
+  const ringScale = portrait ? 0.38 : 1
+  const ringRadius = 1.19 * ringScale
+  const ringX = portrait
+    ? halfW * 0.58
+    : Math.min(2.85, halfW - ringRadius - 0.12)
+  const ringY = portrait ? halfH * 0.34 : 0.6
+
+  return (
+    <>
+      {/* La malla, inclinada como una hoja apoyada sobre el escritorio.
+          En vertical se hunde y se atenúa: con el mismo tamaño en unidades de
+          mundo, las celdas se ven enormes y cruzan el párrafo del hero. */}
+      <group
+        position={[0, portrait ? -2.5 : -1.55, -0.5]}
+        rotation={[-1.16, 0, 0]}
+        scale={portrait ? 1.35 : 1}
+      >
+        <LedgerGrid pointer={pointer} opacity={portrait ? 0.5 : 1} />
+      </group>
+
+      <group position={[ringX, ringY, ringZ]}>
+        <GlassRing pointer={pointer} quality={quality} scale={ringScale} />
+      </group>
+
+      <GoldDust />
+    </>
+  )
+}
 
 function detectQuality(): Quality {
   if (typeof window === 'undefined') return 'off'
@@ -119,19 +176,10 @@ export default function HeroScene() {
           <ambientLight intensity={0.7} />
           <directionalLight position={[3, 5, 4]} intensity={0.8} />
 
-          {/* La malla, inclinada como una hoja apoyada sobre el escritorio */}
-          <group position={[0, -1.55, -0.5]} rotation={[-1.16, 0, 0]}>
-            <LedgerGrid pointer={pointer} />
-          </group>
-
-          <group position={[2.85, 0.6, -1.9]}>
-            <GlassRing
-              pointer={pointer}
-              quality={quality === 'high' ? 'high' : 'low'}
-            />
-          </group>
-
-          <GoldDust />
+          <Composition
+            pointer={pointer}
+            quality={quality === 'high' ? 'high' : 'low'}
+          />
         </Canvas>
       )}
     </div>
